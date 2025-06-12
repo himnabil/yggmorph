@@ -1,0 +1,106 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.8"
+# dependencies = []
+# ///
+
+import argparse
+import shutil
+from pathlib import Path
+
+M2_DIR = Path.home() / ".m2"
+SETTINGS_XML = M2_DIR / "settings.xml"
+YGG_DIR = Path.home() / ".yggmorph"
+YGG_DIR.mkdir(parents=True, exist_ok=True)
+YGG_MAVEN_DIR = YGG_DIR / "maven"
+YGG_MAVEN_DIR.mkdir(parents=True, exist_ok=True)
+
+def maven_remove_settings():
+    if SETTINGS_XML.exists():
+        SETTINGS_XML.unlink()
+        print("settings.xml removed from .m2")
+    else:
+        print("No settings.xml found to remove")
+
+
+def maven_apply_profile(profile_name: str):
+    profile_path = YGG_MAVEN_DIR / f"settings.{profile_name}.xml"
+    if profile_path.exists():
+        shutil.copy(profile_path, SETTINGS_XML)
+        print(f"Profile '{profile_name}' applied.")
+    else:
+        print(f"Profile '{profile_name}' not found in .yggmorph")
+
+
+def maven_save_current_profile(profile_name: str):
+    if SETTINGS_XML.exists():
+        profile_path = YGG_MAVEN_DIR / f"settings.{profile_name}.xml"
+        shutil.copy(SETTINGS_XML, profile_path)
+        print(f"Current settings.xml saved as profile '{profile_name}' in .yggmorph")
+    else:
+        print("No settings.xml found in .m2 to save.")
+
+
+def maven_list_profiles():
+    profiles = sorted([p.name for p in YGG_MAVEN_DIR.glob("settings.*.xml")])
+    if profiles:
+        print("Available profiles:")
+        for profile in profiles:
+            print(" -", profile.replace("settings.", "").replace(".xml", ""))
+    else:
+        print("No profiles found in .yggmorph")
+
+
+parser = argparse.ArgumentParser(description="yggmorph maven profile manager")
+subparsers = parser.add_subparsers(dest="command")
+
+maven_parser = subparsers.add_parser(
+    "maven",
+    help="Manage Maven settings.xml profiles",
+    description="Apply, remove, save, or list Maven available profiles."
+)
+maven_subparsers = maven_parser.add_subparsers(dest="maven_command")
+
+maven_apply_parser = maven_subparsers.add_parser(
+    "apply",
+    help="Apply a saved Maven profile or remove the settings.xml"
+)
+maven_apply_parser.add_argument(
+    "-p", "--profile",
+    type=str,
+    required=True,
+    help="Profile name to apply (settings.<profile>.xml in ~/.yggmorph) or 'default' to remove settings.xml"
+)
+
+maven_save_parser = maven_subparsers.add_parser(
+    "save",
+    help="Save current settings.xml as settings.<profile>.xml in ~/.yggmorph"
+)
+maven_save_parser.add_argument(
+    "-p", "--profile",
+    type=str,
+    required=True,
+    help="Profile name to save the current settings.xml under"
+)
+
+maven_subparsers.add_parser(
+    "list-profiles",
+    help="List all saved Maven settings.xml profiles in ~/.yggmorph"
+)
+
+args = parser.parse_args()
+
+if args.command == "maven":
+    if args.maven_command == "save":
+        maven_save_current_profile(args.profile)
+    elif args.maven_command == "apply":
+        if args.profile == "default":
+            maven_remove_settings()
+        else:
+            maven_apply_profile(args.profile)
+    elif args.maven_command == "list-profiles":
+        maven_list_profiles()
+    else:
+        maven_parser.print_help()
+else:
+    parser.print_help()
