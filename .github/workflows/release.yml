@@ -26,6 +26,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install uv
 
+      - name: Make yggmorph executable
+        run: chmod +x yggmorph
+
       - name: Get the version
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV

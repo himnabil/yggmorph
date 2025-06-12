@@ -2,25 +2,33 @@
 
 A command-line tool for managing Maven settings.xml profiles.
 
-## Releases
-
-The project uses GitHub Actions to automatically create releases when a new tag is pushed. To create a new release:
-
-1. Push a new tag with the version number:
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-
-2. GitHub Actions will automatically create a release with the yggmorph script and documentation.
-
-## Installation
-
-### Requirements
+## Requirements
 - Python 3.8 or higher
 - [uv](https://github.com/astral-sh/uv) - Python package installer and resolver
 
-### Installation Steps
+
+## Installation
+
+### Automatic Installation
+
+You can install yggmorph automatically using our installation script:
+
+```bash
+# Using curl
+curl -sSL https://raw.githubusercontent.com/himnabil/yggmorph/main/install.sh | bash
+
+# Or using wget
+wget -qO- https://raw.githubusercontent.com/himnabil/yggmorph/main/install.sh | bash
+```
+
+The script will:
+- Download the latest release of yggmorph
+- Install it to `/usr/local/bin` (if you have write permissions) or `$HOME/.local/bin`
+- Make it executable and ready to use
+
+### Manual Installation
+
+#### Installation Steps
 
 1. Clone this repository:
    ```bash
