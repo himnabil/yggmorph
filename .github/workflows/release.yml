@@ -8,6 +8,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions: # Add this section
+      contents: write  # Ensure the token has write access to contents
+      packages: write  # Optionally add more permissions if required
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
