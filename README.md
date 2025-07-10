@@ -1,10 +1,9 @@
 # yggmorph
 
-A command-line tool for managing Maven settings.xml profiles.
+A command-line tool for managing Maven settings.xml profiles written in Rust.
 
 ## Requirements
-- Python 3.8 or higher
-- [uv](https://github.com/astral-sh/uv) - Python package installer and resolver
+- Rust toolchain with Cargo
 
 
 ## Installation
@@ -35,18 +34,15 @@ The script will:
    git clone https://github.com/himnabil/yggmorph.git
    ```
 
-2. Make the script executable:
+2. Build the project using Cargo:
    ```bash
-   chmod +x yggmorph/yggmorph
+   cd yggmorph
+   cargo build --release
    ```
 
-3. Add the script to your PATH or create a symbolic link to it in a directory that's already in your PATH:
+3. Copy the resulting binary to a directory in your `PATH`:
    ```bash
-   # Option 1: Add to PATH
-   export PATH="$PATH:/path/to/yggmorph"
-
-   # Option 2: Create a symbolic link
-   ln -s /path/to/yggmorph/yggmorph ~/.local/bin/yggmorph
+   cp target/release/yggmorph ~/.local/bin/
    ```
 
 ## Usage

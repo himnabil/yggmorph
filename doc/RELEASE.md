@@ -8,5 +8,5 @@ The project uses GitHub Actions to automatically create releases when a new tag 
    git push origin v1.0.0
    ```
 
-2. GitHub Actions will automatically create a release with the yggmorph script and documentation.
+2. GitHub Actions will automatically build the yggmorph binary and create a release with the executable and documentation.
 
