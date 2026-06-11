@@ -1,0 +1,20 @@
+[project]
+name = "dialect-companion"
+version = "0.1.0"
+description = "AI companion that chats in Arabic dialects (starting with Oran, Algeria) and translates to English and French"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=0.40.0",
+    "pydantic>=2.0",
+]
+
+[project.scripts]
+dialect-companion = "dialect_companion.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dialect_companion"]
